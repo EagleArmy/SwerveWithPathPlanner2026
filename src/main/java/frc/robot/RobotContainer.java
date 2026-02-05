@@ -55,8 +55,8 @@ public class RobotContainer {
     public RobotContainer() {
         SignalLogger.start();
         SignalLogger.setPath("/home/lvuser/logs");
-        // autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        autoChooser = AutoBuilder.buildAutoChooser("box");
+        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        //autoChooser = AutoBuilder.buildAutoChooser("box");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
