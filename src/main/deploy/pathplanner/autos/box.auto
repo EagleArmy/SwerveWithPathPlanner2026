@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2m"
+            "pathName": "boxleft"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2m then back"
+            "pathName": "boxup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "boxright"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "boxdown"
           }
         }
       ]
