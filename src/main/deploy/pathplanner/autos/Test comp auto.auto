@@ -15,6 +15,18 @@
           "data": {
             "pathName": "test Path 2(collect balls)"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test path(over bump 2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "shoot test"
+          }
         }
       ]
     }
