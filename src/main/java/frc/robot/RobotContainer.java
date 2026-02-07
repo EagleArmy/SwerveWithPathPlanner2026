@@ -24,8 +24,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.DriverProfile;
+import frc.robot.Constants.VisionProfile;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Limelightsubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer {
@@ -41,6 +44,12 @@ public class RobotContainer {
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
+
+    private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
+    private final CommandXboxController driveController = new CommandXboxController(DriverProfile.driverPortNum);
+    private final Limelightsubsystem vision = new Limelightsubsystem();
+
+
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
@@ -52,9 +61,7 @@ public class RobotContainer {
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
-    // public final CommandSwerveDrivetrain.SwerveDriveState getState(){
-    //     double pose = Pose2d;
-    // }
+
 
     public RobotContainer() {
         SignalLogger.start();
@@ -65,11 +72,7 @@ public class RobotContainer {
 
         configureBindings();
 
-        //April tags
-        //LimelightHelpers.getBotPose3d("Limelight");
-        //LimelightHelpers.SetRobotOrientation("Limelight", MaxAngularRate, MaxAngularRate, MaxAngularRate, MaxAngularRate, MaxSpeed, MaxAngularRate);
-
-
+        
 
         // Warmup PathPlanner to avoid Java pauses
         FollowPathCommand.warmupCommand().schedule();
@@ -85,6 +88,19 @@ public class RobotContainer {
                 drive.withVelocityX(joystick.getLeftY() * MaxSpeed/3) // Drive forward with negative Y (forward)
                     .withVelocityY(joystick.getLeftX() * MaxSpeed/3) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+
+
+
+
+        );
+        
+        joystick.y().whileTrue(
+            drivetrain.applyRequest(() -> robotCentric
+                .withRotationalRate(0)
+                .withVelocityX(-driveController.getLeftY() * DriverProfile.y_AlignmentMultiplier) // Reduced speed for fine adjustments
+                .withVelocityY(vision.getRightReefTx(VisionProfile.elevatorLimelight) *0.02)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
+            
             )
         );
 
@@ -107,9 +123,9 @@ public class RobotContainer {
             forwardStraight.withVelocityX(-0.5).withVelocityY(0))
         );
 
-        //SIGNAL LOGGER TURN ON!!!!!!!!!!!!!
-        joystick.leftTrigger().onTrue(Commands.runOnce(SignalLogger::start));
-        joystick.rightTrigger().onTrue(Commands.runOnce(SignalLogger::stop));
+        // //SIGNAL LOGGER TURN ON!!!!!!!!!!!!!
+        // joystick.leftTrigger().onTrue(Commands.runOnce(SignalLogger::start));
+        // joystick.rightTrigger().onTrue(Commands.runOnce(SignalLogger::stop));
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
         joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
