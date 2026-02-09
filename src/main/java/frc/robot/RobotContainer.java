@@ -26,6 +26,8 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.Shooter2Subsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer {
@@ -47,6 +49,8 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         public final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+        public final HopperSubsystem m_HopperSubsystem = new HopperSubsystem();
+         public final Shooter2Subsystem m_Shooter2Subsystem = new Shooter2Subsystem();
 
 
     /* Path follower */
@@ -118,11 +122,21 @@ public class RobotContainer {
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         //testing motor
-        joystick.x().whileTrue(new InstantCommand( () -> m_ShooterSubsystem.start())); 
-        joystick.b().whileTrue(new InstantCommand( () -> m_ShooterSubsystem.stop()));
-        joystick.y().onTrue(new InstantCommand( () -> m_ShooterSubsystem.increasetestingspeed()));
-        joystick.a().onTrue(new InstantCommand( () -> m_ShooterSubsystem.decreasetestingspeed()));
-        joystick.rightBumper().onTrue(new InstantCommand( () -> m_ShooterSubsystem.reverse()));
+        // joystick.x().whileTrue(new InstantCommand( () -> m_ShooterSubsystem.start())); 
+        // joystick.b().whileTrue(new InstantCommand( () -> m_ShooterSubsystem.stop()));
+        // joystick.y().onTrue(new InstantCommand( () -> m_ShooterSubsystem.increasetestingspeed()));
+        // joystick.a().onTrue(new InstantCommand( () -> m_ShooterSubsystem.decreasetestingspeed()));
+        // joystick.rightBumper().onTrue(new InstantCommand( () -> m_ShooterSubsystem.reverse()));
+
+        
+        // Schedule `setVelocity` when the Xbox controller's B button is pressed,
+        // cancelling on release.
+        joystick.a().whileTrue(m_Shooter2Subsystem.setVelocity(RPM.of(60)));
+        joystick.b().whileTrue(m_Shooter2Subsystem.setVelocity(RPM.of(300)));
+        // Schedule `set` when the Xbox controller's B button is pressed,
+        // cancelling on release.
+        joystick.x().whileTrue(m_Shooter2Subsystem.set(0.3));
+        joystick.y().whileTrue(m_Shooter2Subsystem.set(-0.3));
         
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
