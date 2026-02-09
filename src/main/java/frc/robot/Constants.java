@@ -9,7 +9,31 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class Constants {
-   
+
+       public class DriverProfile {
+        /* Angular speed multiplier */
+        public static final double kRotationMagnitude = 0.48;
+
+        /* Slow mode speeds */
+        public static final double x_SlowMultiplier = 0.65;
+        public static final double y_SlowMultiplier = 0.65;
+        public static final double rx_SlowMultiplier = 0.75;
+
+        /* Driver station ports */
+        public static final int driverPortNum = 0;
+        public static final int operatorPortNum = 1;
+        public static final int technicianPortNum = 2;
+
+        /* Alignment Speed Multiplier */
+        public static final double x_AlignmentMultiplier = 0.5;
+        public static final double y_AlignmentMultiplier = 0.85; 
+
+        /* Alignment Speeds */
+        public static final double x_slowMode = 0.7;
+        public static final double y_slowMode = 0.8;
+        public static final double rx_slowMode = 0.4;
+    }
+        
     public static final class TestingConstants 
   {
     public static final int testMotorID = 6;
@@ -42,6 +66,27 @@ public class Constants {
     public static final double hopperSpeed = 0.5;
 
   }
+      public class VisionProfile {
+        /* Limelight names */
+        public static String frontLimelight = "limelight-front";
+        public static String elevatorLimelight = "limelight-rear";
+
+        /* Calibrated frontLimelight Pipeline */
+        public static int autoPipeline = 0;
+
+        /* Calibrated elevator limelight pipelines */
+        public static int reefPipeline_Test = 0;
+        public static int blueReefCenterPipeline = 1;
+        public static int blueReefLeftPipeline = 1;
+        public static int blueReefRightPipeline = 3;
+        public static int redReefCenterPipeline = 4;
+        public static int redReefLeftPipeline = 4;
+        public static int redReedRightPipeline = 5;
+
+        /* Proportional limits for front limelight */
+        public static double reefProportionalTx = 28;
+        public static double algaeProportionalTx = 7.5;
+    }
 
 
   }
