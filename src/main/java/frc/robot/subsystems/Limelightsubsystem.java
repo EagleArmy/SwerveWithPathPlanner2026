@@ -11,66 +11,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionProfile;
 import frc.robot.LimelightHelpers;
 
-public class Limelightsubsystem extends SubsystemBase {
+public class LimelightSubsystem extends SubsystemBase {
   private Debouncer alignmentDebouncer = new Debouncer(0.2);
   
   /* Creates a new Vision. */
-  public Limelightsubsystem() {
+  public LimelightSubsystem() {
     setLimelightPipeline(VisionProfile.frontLimelight, VisionProfile.autoPipeline);
   }
 
   /**
    * Sets commanded pipeline setup to limelight.
    * @param limelight String, limelight name
-   * @param pipeline int, commanded pipeline
+    *@param pipeline int, commanded pipeline
    */
+
   private void setLimelightPipeline(String limelight, int pipeline) {
     LimelightHelpers.setPipelineIndex(limelight, pipeline);
   }
   
-  /**
-   * Retrieves reef Tx from left reef pipelines.
-   * 
-   * @param limelight String, front limelight
-   * @return double, limelight Tx
-   */
-  public double getLeftReefTx(String limelight) {
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      setLimelightPipeline(limelight, VisionProfile.blueReefLeftPipeline);
-
-      return -LimelightHelpers.getTX(limelight);
-    }
-    else {
-      setLimelightPipeline(limelight, VisionProfile.redReefLeftPipeline);
-      return -LimelightHelpers.getTX(limelight);
-    }
-  }
-
-  /**
-   * Retrieves reef Tx from right reef pipelines.
-   * 
-   * @param limelight String, front limelight
-   * @return double, limelight Tx
-   */
-  public double getRightReefTx(String limelight) {
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      setLimelightPipeline(limelight, VisionProfile.blueReefRightPipeline);
-
-      return -LimelightHelpers.getTX(limelight);
-    }
-    else {
-      setLimelightPipeline(limelight, VisionProfile.redReedRightPipeline);
-      return -LimelightHelpers.getTX(limelight);
-    }
-  }
-
-  /**
-   * Retrieves reef Tx from center reef pipelines.
-   * 
-   * @param limelight String, front limelight
-   * @return double, limelight Tx
-   */
-  public double getCenterReefTx(String limelight) {
+    public double getCenterReefTx(String limelight) {
     if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
       setLimelightPipeline(limelight, VisionProfile.blueReefCenterPipeline);
 
@@ -81,9 +40,16 @@ public class Limelightsubsystem extends SubsystemBase {
       return -LimelightHelpers.getTX(limelight);
     }
   }
+   /* Retrieves reef Tx from left reef pipelines.
+   *
+   * @param limelight String, front limelight
+   * @return double, limelight Tx
+   */
+
+
 
   public boolean limelightAlignedTx() {
-    if ((LimelightHelpers.getTX(VisionProfile.elevatorLimelight) <= 0.8) && (LimelightHelpers.getTX(VisionProfile.elevatorLimelight) >= -0.8)) {
+    if ((LimelightHelpers.getTX(VisionProfile.frontLimelight) <= 0.8) && (LimelightHelpers.getTX(VisionProfile.frontLimelight) >= -0.8)) {
       return alignmentDebouncer.calculate(true);
     }
     else {

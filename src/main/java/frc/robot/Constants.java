@@ -68,20 +68,19 @@ public class Constants {
   }
       public class VisionProfile {
         /* Limelight names */
-        public static String frontLimelight = "limelight-front";
-        public static String elevatorLimelight = "limelight-rear";
+        public static String frontLimelight = "limelight";
 
         /* Calibrated frontLimelight Pipeline */
         public static int autoPipeline = 0;
 
         /* Calibrated elevator limelight pipelines */
         public static int reefPipeline_Test = 0;
-        public static int blueReefCenterPipeline = 1;
-        public static int blueReefLeftPipeline = 1;
-        public static int blueReefRightPipeline = 3;
-        public static int redReefCenterPipeline = 4;
-        public static int redReefLeftPipeline = 4;
-        public static int redReedRightPipeline = 5;
+        public static int blueReefCenterPipeline = 0;
+        public static int blueReefLeftPipeline = 0;
+        public static int blueReefRightPipeline = 0;
+        public static int redReefCenterPipeline = 0;
+        public static int redReefLeftPipeline = 0;
+        public static int redReedRightPipeline = 0;
 
         /* Proportional limits for front limelight */
         public static double reefProportionalTx = 28;

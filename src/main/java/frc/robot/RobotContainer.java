@@ -28,7 +28,7 @@ import frc.robot.Constants.DriverProfile;
 import frc.robot.Constants.VisionProfile;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Limelightsubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer {
@@ -41,13 +41,9 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-
-    private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
-    private final CommandXboxController driveController = new CommandXboxController(DriverProfile.driverPortNum);
-    private final Limelightsubsystem vision = new Limelightsubsystem();
+    private final LimelightSubsystem vision = new LimelightSubsystem();
 
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -85,22 +81,27 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY() * MaxSpeed/3) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed/3) // Drive left with negative X (left)
+                drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            ));
+
+            joystick.rightTrigger().whileTrue(
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(joystick.getLeftY() * MaxSpeed/10) // Drive forward with negative Y (forward)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed/10) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
+            );
 
-
-
-
-        );
         
-        joystick.y().whileTrue(
-            drivetrain.applyRequest(() -> robotCentric
-                .withRotationalRate(0)
-                .withVelocityX(-driveController.getLeftY() * DriverProfile.y_AlignmentMultiplier) // Reduced speed for fine adjustments
-                .withVelocityY(vision.getRightReefTx(VisionProfile.elevatorLimelight) *0.02)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
-            
+        joystick.leftBumper().debounce(0.2).whileTrue(
+            drivetrain.applyRequest(() -> forwardStraight
+                .withRotationalRate(vision.getCenterReefTx("limelight")/VisionProfile.reefProportionalTx)
+                System.out.println(Robot.robotPeriodic.limelightAlignedTx);
+                .withVelocityX(joystick.getLeftY()* DriverProfile.y_AlignmentMultiplier) // Reduced speed for fine adjustments
+                .withVelocityY(joystick.getLeftX() *DriverProfile.x_AlignmentMultiplier)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
+                //.withVelocityY(LimelightHelpers.getTX("limelight") *0.02)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
             )
         );
 
@@ -141,7 +142,7 @@ public class RobotContainer {
         joystick.rightBumper().onTrue(new InstantCommand( () -> m_ShooterSubsystem.reverse()));
         
         // Reset the field-centric heading on left bumper press.
-        joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        //joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
