@@ -28,12 +28,8 @@ import frc.robot.Constants.DriverProfile;
 import frc.robot.Constants.VisionProfile;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-<<<<<<< HEAD
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.Shooter2Subsystem;
-=======
-import frc.robot.subsystems.Limelightsubsystem;
->>>>>>> ecb0be543edf58868313322bf12fa7646da3eca1
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer {
@@ -52,7 +48,7 @@ public class RobotContainer {
 
     private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
     private final CommandXboxController driveController = new CommandXboxController(DriverProfile.driverPortNum);
-    private final Limelightsubsystem vision = new Limelightsubsystem();
+   // private final Limelightsubsystem vision = new Limelightsubsystem();
 
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -79,8 +75,6 @@ public class RobotContainer {
 
         configureBindings();
 
-        
-
         // Warmup PathPlanner to avoid Java pauses
         FollowPathCommand.warmupCommand().schedule();
         
@@ -97,19 +91,16 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
 
-
-
-
         );
         
-        joystick.y().whileTrue(
-            drivetrain.applyRequest(() -> robotCentric
-                .withRotationalRate(0)
-                .withVelocityX(-driveController.getLeftY() * DriverProfile.y_AlignmentMultiplier) // Reduced speed for fine adjustments
-                .withVelocityY(vision.getRightReefTx(VisionProfile.elevatorLimelight) *0.02)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
+        // joystick.y().whileTrue(
+        //     drivetrain.applyRequest(() -> robotCentric
+        //         .withRotationalRate(0)
+        //         .withVelocityX(-driveController.getLeftY() * DriverProfile.y_AlignmentMultiplier) // Reduced speed for fine adjustments
+        //         .withVelocityY(vision.getRightReefTx(VisionProfile.elevatorLimelight) *0.02)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
             
-            )
-        );
+        //     )
+        // );
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -156,6 +147,7 @@ public class RobotContainer {
         // cancelling on release.
         joystick.x().whileTrue(m_Shooter2Subsystem.set(0.3));
         joystick.y().whileTrue(m_Shooter2Subsystem.set(-0.3));
+        joystick.rightBumper().whileTrue(m_Shooter2Subsystem.set(0));
         
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));

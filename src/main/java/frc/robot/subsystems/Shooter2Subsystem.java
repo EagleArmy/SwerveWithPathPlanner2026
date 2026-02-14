@@ -59,7 +59,7 @@ public class Shooter2Subsystem extends SubsystemBase {
 
   // Create our SmartMotorController from our Spark and config with the NEO.
   private SmartMotorController encoderController = new TalonFXWrapper(shooterMotor, DCMotor.getFalcon500(1), smcConfig);
- private final FlyWheelConfig shooterConfig = new FlyWheelConfig()
+ private final FlyWheelConfig shooterConfig = new FlyWheelConfig(encoderController)
   // Diameter of the flywheel.
   .withDiameter(Inches.of(4))
   // Mass of the flywheel.
