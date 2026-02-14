@@ -8,6 +8,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.VisionProfile;
 import frc.robot.LimelightHelpers;
 
@@ -39,12 +40,11 @@ public class LimelightSubsystem extends SubsystemBase {
 public double getHubTA(String Limelight){
   if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
     setLimelightPipeline(Limelight, 0);
-
-    return LimelightHelpers.getTA(Limelight);
+    return LimelightHelpers.getTY(Limelight);
   }
   else{
     setLimelightPipeline(Limelight, 0);
-    return LimelightHelpers.getTA(Limelight);
+    return LimelightHelpers.getTY(Limelight);
   }
 }
 
@@ -76,6 +76,6 @@ public double getHubTA(String Limelight){
   @Override
   // This method will be called once per scheduler run
   public void periodic() {
-    SmartDashboard.putBoolean("AlignedWithReef", limelightAlignedTx());
+    SmartDashboard.putBoolean("AlignedWithhubX", limelightAlignedTx());
   }
 }

@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -100,12 +101,11 @@ public class RobotContainer {
             
         // );
 
-        joystick.leftBumper().debounce(0.2).whileTrue(
+        joystick.a().debounce(0.2).whileTrue(
             drivetrain.applyRequest(() -> forwardStraight
-                .withRotationalRate(-vision.getCenterReefTx("limelight")/Constants.VisionProfile.hubProportionalTx*0.5)
-                //.withVelocityX(vision.getHubTA("limelight")) // Reduced speed for fine adjustments
-                .withVelocityY(LimelightHelpers.getTY("limelight")*0)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
-                //.withVelocityY(LimelightHelpers.getTX("limelight") *0.02)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
+                .withRotationalRate(-vision.getCenterReefTx("limelight")/Constants.VisionProfile.hubProportionalTx)
+                //.withVelocityX(vision.getHubTA("limelight")*.5) // Reduced speed for fine adjustments
+                .withVelocityY(joystick.getLeftY())
             )
         );
 
@@ -147,7 +147,7 @@ public class RobotContainer {
         joystick.rightBumper().onTrue(new InstantCommand( () -> m_ShooterSubsystem.reverse()));
         
         // Reset the field-centric heading on left bumper press.
-        //joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        joystick.rightBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

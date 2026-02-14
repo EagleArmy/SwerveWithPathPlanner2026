@@ -83,7 +83,7 @@ public class Constants {
         public static int redHubRightPipeline = 0;
 
         /* Proportional limits for front limelight */
-        public static double hubProportionalTx = 7.5;
+        public static double hubProportionalTx = 12;
     }
 
 
