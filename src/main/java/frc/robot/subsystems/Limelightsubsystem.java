@@ -16,7 +16,7 @@ public class LimelightSubsystem extends SubsystemBase {
   
   /* Creates a new Vision. */
   public LimelightSubsystem() {
-    setLimelightPipeline(VisionProfile.frontLimelight, VisionProfile.autoPipeline);
+    setLimelightPipeline("limelight", 0);
   }
 
   /**
@@ -29,27 +29,43 @@ public class LimelightSubsystem extends SubsystemBase {
     LimelightHelpers.setPipelineIndex(limelight, pipeline);
   }
   
-    public double getCenterReefTx(String limelight) {
+  
+   /* Retrieves reef Tx from left reef pipelines.
+   *
+   * @param limelight String, front limelight
+   * @return double, limelight Tx
+   */
+  
+public double getHubTA(String Limelight){
+  if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
+    setLimelightPipeline(Limelight, 0);
+
+    return LimelightHelpers.getTA(Limelight);
+  }
+  else{
+    setLimelightPipeline(Limelight, 0);
+    return LimelightHelpers.getTA(Limelight);
+  }
+}
+
+
+
+ public double getCenterReefTx(String limelight) {
     if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
       setLimelightPipeline(limelight, VisionProfile.blueReefCenterPipeline);
 
       return -LimelightHelpers.getTX(limelight);
+      
     }
     else {
       setLimelightPipeline(limelight, VisionProfile.redReefCenterPipeline);
       return -LimelightHelpers.getTX(limelight);
     }
   }
-   /* Retrieves reef Tx from left reef pipelines.
-   *
-   * @param limelight String, front limelight
-   * @return double, limelight Tx
-   */
-
 
 
   public boolean limelightAlignedTx() {
-    if ((LimelightHelpers.getTX(VisionProfile.frontLimelight) <= 0.8) && (LimelightHelpers.getTX(VisionProfile.frontLimelight) >= -0.8)) {
+    if ((LimelightHelpers.getTX("limelight") <= 0.8) && (LimelightHelpers.getTX("limelight") >= -0.8)) {
       return alignmentDebouncer.calculate(true);
     }
     else {

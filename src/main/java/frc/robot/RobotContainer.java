@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.DriverProfile;
-import frc.robot.Constants.VisionProfile;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -93,17 +92,23 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
             );
-
         
+
+        // joystick.leftBumper().whileTrue(
+        //     //new InstantCommand(() -> System.out.println(-LimelightHelpers.getTX("limelight")) ) 
+        //     new InstantCommand(() -> System.out.println(vision.getCenterReefTx("limelight")) )
+            
+        // );
+
         joystick.leftBumper().debounce(0.2).whileTrue(
             drivetrain.applyRequest(() -> forwardStraight
-                .withRotationalRate(vision.getCenterReefTx("limelight")/VisionProfile.reefProportionalTx)
-                System.out.println(Robot.robotPeriodic.limelightAlignedTx);
-                .withVelocityX(joystick.getLeftY()* DriverProfile.y_AlignmentMultiplier) // Reduced speed for fine adjustments
-                .withVelocityY(joystick.getLeftX() *DriverProfile.x_AlignmentMultiplier)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
+                .withRotationalRate(-vision.getCenterReefTx("limelight")/Constants.VisionProfile.hubProportionalTx*0.5)
+                //.withVelocityX(vision.getHubTA("limelight")) // Reduced speed for fine adjustments
+                .withVelocityY(LimelightHelpers.getTY("limelight")*0)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
                 //.withVelocityY(LimelightHelpers.getTX("limelight") *0.02)//driveController.getLeftX() * DriverProfile.x_AlignmentMultiplier)
             )
         );
+
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
