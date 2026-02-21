@@ -11,11 +11,14 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,9 +31,12 @@ import frc.robot.Constants.DriverProfile;
 import frc.robot.Constants.VisionProfile;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Shooter2Subsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import yams.mechanisms.positional.Elevator;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -59,6 +65,8 @@ public class RobotContainer {
         public final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
         public final HopperSubsystem m_HopperSubsystem = new HopperSubsystem();
          public final Shooter2Subsystem m_Shooter2Subsystem = new Shooter2Subsystem();
+        public final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+        public final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
 
     /* Path follower */
@@ -81,13 +89,14 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        NamedCommands.registerCommand("Shooter", m_Shooter2Subsystem.setVelocity(RPM.of(1000)));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY() * MaxSpeed/3) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed/3) // Drive left with negative X (left)
+                drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
 
@@ -141,13 +150,23 @@ public class RobotContainer {
         
         // Schedule `setVelocity` when the Xbox controller's B button is pressed,
         // cancelling on release.
-        joystick.a().whileTrue(m_Shooter2Subsystem.setVelocity(RPM.of(60)));
-        joystick.b().whileTrue(m_Shooter2Subsystem.setVelocity(RPM.of(300)));
-        // Schedule `set` when the Xbox controller's B button is pressed,
-        // cancelling on release.
-        joystick.x().whileTrue(m_Shooter2Subsystem.set(0.3));
-        joystick.y().whileTrue(m_Shooter2Subsystem.set(-0.3));
-        joystick.rightBumper().whileTrue(m_Shooter2Subsystem.set(0));
+        // joystick.a().whileTrue(m_Shooter2Subsystem.setVelocity(RPM.of(60)));
+        // joystick.b().whileTrue(m_Shooter2Subsystem.setVelocity(RPM.of(1000)));
+        // // Schedule `set` when the Xbox controller's B button is pressed,
+        // // cancelling on release.
+        // joystick.x().whileTrue(m_Shooter2Subsystem.set(0.3));
+        // joystick.y().whileTrue(m_Shooter2Subsystem.set(-0.3));
+        // joystick.rightBumper().whileTrue(m_Shooter2Subsystem.set(0));
+
+        //intake
+        // joystick.x().whileTrue(m_IntakeSubsystem.setHeightAndStop(Inches.of(2)));
+        // joystick.b().whileTrue(m_IntakeSubsystem.setHeightAndStop(Inches.of(0)));
+        // joystick.rightBumper().onTrue(m_IntakeSubsystem.set(0));
+
+        //elevator
+        joystick.x().onTrue(m_ElevatorSubsystem.setHeight(Inches.of(10)));
+        joystick.b().onTrue(m_ElevatorSubsystem.setHeight(Inches.of(0)));
+        joystick.rightBumper().onTrue(m_ElevatorSubsystem.set(0));
         
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));

@@ -52,8 +52,8 @@ public class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int ShooterMotorID = 10;
-    public static final int ShooterMotorID2 = 2;
+    public static final int ShooterMotorID = 23;
+    public static final int ShooterMotorID2 = 23;
     
     public static final double shooterSpeed = 0.55;
   }
