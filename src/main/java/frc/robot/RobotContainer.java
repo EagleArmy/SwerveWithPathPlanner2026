@@ -29,11 +29,13 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.DriverProfile;
 import frc.robot.Constants.VisionProfile;
+import frc.robot.commands.HopperShooterCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakeSlideSubsystem;
+import frc.robot.subsystems.MiddleWheelSubsystem;
 import frc.robot.subsystems.Shooter2Subsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import yams.mechanisms.positional.Elevator;
@@ -65,8 +67,9 @@ public class RobotContainer {
         public final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
         public final HopperSubsystem m_HopperSubsystem = new HopperSubsystem();
          public final Shooter2Subsystem m_Shooter2Subsystem = new Shooter2Subsystem();
-        public final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+        public final IntakeSlideSubsystem m_IntakeSubsystem = new IntakeSlideSubsystem();
         public final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+        public final MiddleWheelSubsystem m_MiddleWheelSubsystem = new MiddleWheelSubsystem();
 
 
     /* Path follower */
@@ -80,6 +83,20 @@ public class RobotContainer {
         // autoChooser = AutoBuilder.buildAutoChooser("Tests");
         autoChooser = AutoBuilder.buildAutoChooser("box");
         SmartDashboard.putData("Auto Mode", autoChooser);
+        
+        NamedCommands.registerCommand("Shooter", m_Shooter2Subsystem.setVelocity(RPM.of(1000))); //here's how you do yams since they have built in commands
+        NamedCommands.registerCommand("stop shooter", m_Shooter2Subsystem.setVelocity(RPM.of(0)));
+        NamedCommands.registerCommand("start hopper", new InstantCommand(() -> m_HopperSubsystem.start())); //heres how u do the reg subsystem
+        NamedCommands.registerCommand("stop hopper", new InstantCommand(() -> m_HopperSubsystem.stop()));
+        NamedCommands.registerCommand("intake out", m_IntakeSubsystem.setHeightAndStop(Inches.of(6)));
+        NamedCommands.registerCommand("intake in", m_IntakeSubsystem.setHeightAndStop(Inches.of(0)));
+        NamedCommands.registerCommand("start middle wheel", new InstantCommand(() -> m_MiddleWheelSubsystem.start()));
+        NamedCommands.registerCommand("stop middle wheel", new InstantCommand(() -> m_MiddleWheelSubsystem.stop()));
+        NamedCommands.registerCommand("elevator up", m_ElevatorSubsystem.setHeightAndStop(Inches.of(8)));
+        NamedCommands.registerCommand("elevator zero", m_ElevatorSubsystem.setHeightAndStop(Inches.of(0)));
+
+        NamedCommands.registerCommand("hopperShooter", new HopperShooterCommand(m_HopperSubsystem, m_Shooter2Subsystem)); //heres how you put a regular command
+
 
         configureBindings();
 
@@ -89,7 +106,9 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        NamedCommands.registerCommand("Shooter", m_Shooter2Subsystem.setVelocity(RPM.of(1000)));
+        
+
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -164,10 +183,20 @@ public class RobotContainer {
         // joystick.rightBumper().onTrue(m_IntakeSubsystem.set(0));
 
         //elevator
-        joystick.x().onTrue(m_ElevatorSubsystem.setHeight(Inches.of(10)));
-        joystick.b().onTrue(m_ElevatorSubsystem.setHeight(Inches.of(0)));
+        joystick.x().onTrue(m_ElevatorSubsystem.setHeightAndStop(Inches.of(10)));
+        joystick.b().onTrue(m_ElevatorSubsystem.setHeightAndStop(Inches.of(0)));
         joystick.rightBumper().onTrue(m_ElevatorSubsystem.set(0));
         
+        //middle wheel ?
+        while (joystick.getLeftY() > 0)
+        {
+            m_MiddleWheelSubsystem.start();
+        }
+        while (joystick.getLeftY() < 0)
+        {
+            m_MiddleWheelSubsystem.reverse();
+        }
+
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
