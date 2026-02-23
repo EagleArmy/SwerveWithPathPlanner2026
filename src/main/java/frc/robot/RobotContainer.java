@@ -65,7 +65,7 @@ public class RobotContainer {
         SignalLogger.start();
         SignalLogger.setPath("/home/lvuser/logs");
         // autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        autoChooser = AutoBuilder.buildAutoChooser("box");
+        autoChooser = AutoBuilder.buildAutoChooser("Drive");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
@@ -73,7 +73,7 @@ public class RobotContainer {
         
 
         // Warmup PathPlanner to avoid Java pauses
-        FollowPathCommand.warmupCommand().schedule();
+        FollowPathCommand.warmupCommand();
         
     }
 

@@ -113,4 +113,6 @@ public class ShooterSubsystem extends SubsystemBase {
       //log();
     }
 
+    //Katelynn is bad at coding...so is Mark Ruder. 
+    //                            - Michael Murphy        
 }
