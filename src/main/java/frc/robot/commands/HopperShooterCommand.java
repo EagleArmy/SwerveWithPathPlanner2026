@@ -2,14 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.HopperSubsystem;
-import frc.robot.subsystems.Shooter2Subsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 
 public class HopperShooterCommand extends Command{
     private HopperSubsystem m_HopperSubsystem;
-    private Shooter2Subsystem m_ShooterSubsystem;
+    private ShooterSubsystem m_ShooterSubsystem;
 
-    public HopperShooterCommand(HopperSubsystem subsystem1, Shooter2Subsystem subsystem2){
+    public HopperShooterCommand(HopperSubsystem subsystem1, ShooterSubsystem subsystem2){
         m_HopperSubsystem = subsystem1;
         m_ShooterSubsystem = subsystem2;
         addRequirements(m_HopperSubsystem, m_ShooterSubsystem);
@@ -23,7 +23,7 @@ public class HopperShooterCommand extends Command{
         System.out.println("Hopper works with Shooter!");
 
         m_HopperSubsystem.start();
-        m_ShooterSubsystem.set(.55);
+        m_ShooterSubsystem.set(.55,.65);
     }
 
     @Override

@@ -119,6 +119,12 @@ public class ShooterSubsystem extends SubsystemBase {
         System.out.println("Testing Speed: " + testingspeed);
     }
 
+    public void set(double speed, double speed2){
+        ShooterFlywheelMotor.set(speed);
+        ShooterIntakeMotor.set(speed2);
+        ShooterMotor2.set(speed);
+    }
+
     public void reverse() 
     {
         ShooterFlywheelMotor.set(testingspeed);
