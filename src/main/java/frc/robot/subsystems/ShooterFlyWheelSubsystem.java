@@ -32,10 +32,9 @@ import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
-import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
-public class Shooter2Subsystem extends SubsystemBase {
+public class ShooterFlyWheelSubsystem extends SubsystemBase {
 
   private SmartMotorControllerConfig smcConfig = new SmartMotorControllerConfig(this)
   .withControlMode(ControlMode.CLOSED_LOOP)
@@ -50,29 +49,41 @@ public class Shooter2Subsystem extends SubsystemBase {
   // Gearing from the motor rotor to final shaft.
   // In this example GearBox.fromReductionStages(3,4) is the same as GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to your motor.
   // You could also use .withGearing(12) which does the same thing.
-  .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+  .withGearing(new MechanismGearing(GearBox.fromReductionStages(1)))
   // Motor properties to prevent over currenting.
   .withMotorInverted(false)
   .withIdleMode(MotorMode.COAST)
   .withStatorCurrentLimit(Amps.of(40));
 
   // Vendor motor controller object
-  private TalonFX shooterMotor = new TalonFX(ShooterConstants.ShooterMotorID);
-
+  private TalonFX shooterMotorBottom = new TalonFX(ShooterConstants.ShooterFlywheelMotorID);
+  //private TalonFX shooterMotorTop = new TalonFX(ShooterConstants.ShooterMotorID2);
   // Create our SmartMotorController from our Spark and config with the NEO.
-  private SmartMotorController encoderController = new TalonFXWrapper(shooterMotor, DCMotor.getFalcon500(1), smcConfig);
+  private SmartMotorController encoderController = new TalonFXWrapper(shooterMotorBottom, DCMotor.getFalcon500(1), smcConfig);
+  //private SmartMotorController encoderControllerTop = new TalonFXWrapper(shooterMotorTop, DCMotor.getFalcon500(1), smcConfig);
+
  private final FlyWheelConfig shooterConfig = new FlyWheelConfig(encoderController)
   // Diameter of the flywheel.
   .withDiameter(Inches.of(4))
   // Mass of the flywheel.
-  .withMass(Pounds.of(1))
+  .withMass(Pounds.of(2.26))
   // Maximum speed of the shooter.
-  .withUpperSoftLimit(RPM.of(1000))
+  .withUpperSoftLimit(RPM.of(1000));
   // Telemetry name and verbosity for the arm.
-  .withTelemetry("ShooterMech", TelemetryVerbosity.HIGH);
+  //.withTelemetry("ShooterMech", TelemetryVerbosity.HIGH);
+
+  //  private final FlyWheelConfig shooterConfigTop = new FlyWheelConfig(encoderControllerTop)
+  //    .withDiameter(Inches.of(4))
+  // // Mass of the flywheel.
+  // .withMass(Pounds.of(1))
+  // // Maximum speed of the shooter.
+  // .withUpperSoftLimit(RPM.of(1000))
+  // // Telemetry name and verbosity for the arm.
+  // .withTelemetry("ShooterMech", TelemetryVerbosity.HIGH);
 
   // Shooter Mechanism
   private FlyWheel shooter = new FlyWheel(shooterConfig);
+  //private FlyWheel shooterTop = new FlyWheel(shooterConfigTop);
 
   /**
    * Gets the current velocity of the shooter.
@@ -113,7 +124,8 @@ public class Shooter2Subsystem extends SubsystemBase {
   public Command set(double dutyCycle) {return shooter.set(dutyCycle);}
 
   /** Creates a new ExampleSubsystem. */
-  public Shooter2Subsystem() {}
+  public ShooterFlyWheelSubsystem() {
+  }
 
   /**
    * Example command factory method.
@@ -139,6 +151,8 @@ public class Shooter2Subsystem extends SubsystemBase {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
+
+    
 
   @Override
   public void periodic() {

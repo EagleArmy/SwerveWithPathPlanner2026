@@ -41,7 +41,7 @@ public class Constants {
 
     public static final class ElevatorConstants 
   {
-    public static final int kElevatorLeftMotorID = 99;        //Pratice Robot ID: 3
+    public static final int ElevatorLeftMotorID = 6;        //Pratice Robot ID: 3
     //public static final int kElevatorRightMotorID = 10;      //Pratice Robot ID: 44
     // public static final double kStartPosition = 0; 
     // public static final double kFirstPosition = 4.6; //originally 0
@@ -52,38 +52,48 @@ public class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int ShooterMotorID = 23;
-    public static final int ShooterMotorID2 = 23;
+    public static final int ShooterFlywheelMotorID = 10;
+    public static final int ShooterMotorID2 = 2;
+    public static final int ShooterIntakeID = 4;
     
-    public static final double shooterSpeed = 0.55;
+    public static final double shooterSpeed = 0.75;
   }
 
   public static final class IntakeConstants{
-    public static final int IntakeMotorID = 8;
+    public static final int IntakeSlideMotorID = 20;
     public static final double intakeSpeed = 1.0;
+
+    public static final int IntakeMotorID = 8;
 
     public static final int HopperMotorID = 11;
     public static final double hopperSpeed = 0.5;
 
   }
+
+  public static final class MiddleWheelConstants {
+    public static final int MiddleWheelMotorID = 23;
+    public static final double MiddleWheelSpeed = 0.65;
+  }
       public class VisionProfile {
         /* Limelight names */
-        public static String frontLimelight = "limelight";
+        public static String frontLimelight = "limelight-front";
+        public static String elevatorLimelight = "limelight-rear";
 
         /* Calibrated frontLimelight Pipeline */
         public static int autoPipeline = 0;
 
         /* Calibrated elevator limelight pipelines */
         public static int reefPipeline_Test = 0;
-        public static int blueReefCenterPipeline = 0;
-        public static int blueReefLeftPipeline = 0;
-        public static int blueReefRightPipeline = 0;
-        public static int redReefCenterPipeline = 0;
-        public static int redReefLeftPipeline = 0;
-        public static int redHubRightPipeline = 0;
+        public static int blueReefCenterPipeline = 1;
+        public static int blueReefLeftPipeline = 1;
+        public static int blueReefRightPipeline = 3;
+        public static int redReefCenterPipeline = 4;
+        public static int redReefLeftPipeline = 4;
+        public static int redReedRightPipeline = 5;
 
         /* Proportional limits for front limelight */
-        public static double hubProportionalTx = 12;
+        public static double hubProportionalTx = 28;
+        public static double algaeProportionalTx = 7.5;
     }
 
 

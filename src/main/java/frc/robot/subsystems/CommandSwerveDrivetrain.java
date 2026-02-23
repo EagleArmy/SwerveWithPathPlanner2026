@@ -287,9 +287,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        
-
-
+    
 
         field2d.setRobotPose(this.getState().Pose);
         SmartDashboard.putData(field2d);
