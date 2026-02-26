@@ -88,7 +88,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   public ElevatorSubsystem() {
     // Initialize motor controller
-    motor = new TalonFX(ElevatorConstants.ElevatorLeftMotorID);
+    motor = new TalonFX(ElevatorConstants.ElevatorMotorID);
 
     // Create control requests
     positionRequest = new PositionVoltage(0).withSlot(0);

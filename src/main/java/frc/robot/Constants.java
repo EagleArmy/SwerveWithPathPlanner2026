@@ -41,7 +41,7 @@ public class Constants {
 
     public static final class ElevatorConstants 
   {
-    public static final int ElevatorLeftMotorID = 6;        //Pratice Robot ID: 3
+    public static final int ElevatorMotorID = 6;        //Pratice Robot ID: 3
     //public static final int kElevatorRightMotorID = 10;      //Pratice Robot ID: 44
     // public static final double kStartPosition = 0; 
     // public static final double kFirstPosition = 4.6; //originally 0
@@ -66,7 +66,7 @@ public class Constants {
     public static final int IntakeSlideMotorID = 23;
 
     public static final int HopperMotorID = 100;
-    public static final int IntakeMotorID = 8;
+    public static final int IntakeMotorID = 9;
 
     public static final double hopperSpeed = 0.5;
 

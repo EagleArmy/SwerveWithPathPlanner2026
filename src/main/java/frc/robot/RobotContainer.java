@@ -40,6 +40,8 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 // import frc.robot.subsystems.ElevatorSubsystem;
 // import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSlideSubsystem;
+import frc.robot.subsystems.IntakeSlideSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 // import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.MiddleWheelSubsystem;
 //  import frc.robot.subsystems.ShooterFlyWheelSubsystem;
@@ -74,6 +76,8 @@ public class RobotContainer {
     //     public final ShooterFlyWheelSubsystem m_ShooterFlyWheelSubsystem = new ShooterFlyWheelSubsystem();
        public final MiddleWheelSubsystem m_MiddleWheelSubsystem = new MiddleWheelSubsystem();
          public final IntakeSlideSubsystem m_IntakeSlideSubsystem = new IntakeSlideSubsystem();
+        public final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+
         //  public final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
          public final SysIDShooter m_SysIDShooter = new SysIDShooter();
@@ -205,9 +209,13 @@ public class RobotContainer {
         // joystick.rightBumper().whileTrue(m_Shooter2Subsystem.set(0));
 
         //intake
-        // joystick.x().whileTrue(m_IntakeSubsystem.setHeightAndStop(Inches.of(2)));
-        // joystick.b().whileTrue(m_IntakeSubsystem.setHeightAndStop(Inches.of(0)));
-        // joystick.rightBumper().onTrue(m_IntakeSubsystem.set(0));
+        // joystick.x().whileTrue(m_IntakeSlideSubsystem.moveToHeight(Inches.of(2)));
+        // joystick.b().whileTrue(m_IntakeSlideSubsystem.moveToHeight(Inches.of(0)));
+        joystick.rightBumper().onTrue(new InstantCommand( () -> m_IntakeSubsystem.start()));
+        joystick.leftBumper().onTrue(new InstantCommand(() -> m_IntakeSubsystem.stop()));
+        joystick.y().onTrue(new InstantCommand(() -> m_IntakeSubsystem.increasetestingspeed()));
+        joystick.a().onTrue(new InstantCommand(() -> m_IntakeSubsystem.decreasetestingspeed()));
+
 
         //elevator
         // joystick.x().onTrue(m_ElevatorSubsystem.setHeightAndStop(Inches.of(33)));
